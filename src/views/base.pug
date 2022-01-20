@@ -13,7 +13,17 @@ html(lang="ko")
                     li
                         a(href="/") Home
                     li
-                        a(href="/search") Search    
+                        a(href="/search") Search 
+                    if !loggedIn
+                        li 
+                            a(href="/login") Login 
+                        li
+                            a(href="/join") Join
+                    else 
+                        li 
+                            a(href="/logout") logout 
+                        li 
+                            a(href="/my-profile") #{loggedInUser.name}'s profile
         main
             block content
     include partials/footer
