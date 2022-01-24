@@ -1,0 +1,198 @@
+
+<Ch07 : User Authentication>
+
+unique : true
+    make index
+
+model을 받아서 model을 create, find.. 등등
+개념에 대해 좀더 정확히 알아보기
+
+Password Hashing(using bcrypt)
+    DB password 보안처리 필요
+    DB에 적힌 password를 봐도, 해석이 되지 않게 하는 것
+    정확한 password가 뭔지 몰라도, password가 일치하는지 안하는지 알려줌
+
+    Hashing : one way function
+    해싱된 패스워드를 DB에 저장
+    Hashing으로 실제 pw를 알아낼 수 없음
+    입력을 하면 출력이 나오는데 출력으론 입력을 알 수 없음
+    같은 입력 -> 같은 해쉬값 
+
+    rainbow table 공격을 bcrypt가 막아줌
+
+    salt
+        password를 더 예측하기 어렵게 만들어줌
+        saltRound만큼 hashing
+        higher salt, 연산은 더 어렵지만, 보안성 올라감
+        The salt is incorporated into the hash (encoded in a base64-style format).
+
+    "save" -> Create() 포함
+    password = await bcrypt.hash(this.password, 5);
+    
+
+    this in Schema middleware(pre,hook,post)
+        = document,data
+        using this, get the document
+
+Status Code
+    브라우저는 join에 실패했음에도 불구하고 id/비번 저장할거냐고 물음
+    =성공적 join으로 인식, status code가 200으로 나가서 그럼
+
+    res.render -> default 200
+    res.status(400).render()
+
+    (2XX) : Success
+    (3XX) : Redirection
+    (4XX) : Client Errors
+
+    상태 코드에 맞게 브라우저가 적절한 행동을 하므로, 맞춰주자
+        ex)404 -> history에 안남김
+    
+Login pw check
+    Hash값 DB에 저장,
+    login시 hash함수 적용해서 해쉬값 비교(bcrypt의 compare이용)
+    일치하면 맞음
+
+Session vs Cookies
+    remember the User
+    브라우저가 너가 누구인지 아니까, 채널 구독 등 알 수 있는 건데.. how?
+
+    Session
+        백엔드와 브라우저 간에 어떤 활동을 했는지 기억함
+        브라우저와 백엔드 사이에 세션 존재
+        백엔드와 브라우저 사이의 history,memory 느낌
+        작동하려면 백엔드와 브라우저가 서로에 대한 정보를 가지고 있어야 함
+        
+    HTTP : Stateless
+        server does not remember the user across requests.
+        요청을 받고 처리를 끝내면, 서버는 누가 요청을 보냇는지 잊고, 브라우저도 잊음
+        일회성 연결
+
+    유저가 로그인할때, 유저에게 어떤 텍스트를 줌
+    유저가 우리한테 요청을 보낼때마다, 그 텍스트를 보고 확인
+    유저가 누구인지 알 수있게 해주는 무언가
+    유저한테 요청을 보낼때마다 그 텍스트 같이 보내달라고 함
+
+    using express-session
+        session 미들웨어가 들어오는 모든 유저 기억
+        서버에서는 session 미들웨어가 브라우저에게 텍스트 보냄
+        서버는 브라우저(client)를 개별적 기억
+        브라우저가 알아서 백엔드로 쿠키를 보내도록 설정됨
+        쿠키는 헤더에 저장
+        브라우저에서 id를 넘겨준다고 생각
+        백엔드가 누가 자기한테 요청했는지 다 기억하고 있음
+
+        서버 재시작 할때마다, 세션 잊음 안잊으려면, mongoDB와 연결
+        각 세션은 id가 있고, 이 id를 서버에서 브라우저에게 보냄
+        브라우저가 요청을 보낼때마다 받은 id를 같이 보내주고 그 브라우저와 일치하는 세션이 뭔지 알 수 있음
+        서로 다른 브라우저면, 서로 다른 쿠키, 서로 다른 세션id
+        세션, 세션 id는 브라우저 기억 방식중 하나
+        세션id를 가지고 있으면, 세션 object에 정보 추가 가능
+        브라우저가 서버에 요청을 보낼때마다 쿠키에서 세션id를 가져와서 받았던 id를 요청에 담아서 보냄
+        
+        백엔드의 세션 DB에서 저 id를 가진 세션을 찾고 그 세션에 정보를 담을 수 있는 것
+        유저 정보 기억, 유저 세션에 정보 추가 가능
+
+        session middleware있으면, express가 알아서 그 브라우저를 위한 세션id를 만들고 브라우저에게 보내줌
+        브라우저가 쿠키에 그 세션 id를 저장하고 express에서도 그 세션을 세션DB에 저장
+        세션 DB에 있는 id와 쿠키에 있는 id가 같도록
+
+
+        각 유저마다 서로 다른 req.session object를 가지고 있음            
+            add information to session object
+            req.session.loggedIn = true;
+            req.session.user = user;
+            
+        서버는 모든 쿠키를 다 가지고 있고, 클라이언트는 쿠키 1개만
+        req.sessionStore.all() : can see all the session stored in server
+        
+        pug templated에서 response.locals에 접근 가능
+        pug, express share the locals
+        global변수, 모든 template에서 쓸 수 있음
+        res.locals는 object니까 그냥 res.locals.var = "AA";
+        이런식으로 express 미들웨어에서 추가 가능
+          
+        session middleware가 있어야 session object에 접근 가능
+
+
+
+Request object
+    클라이언트(브라우저)를 통해 서버에 어떤 정보를 요청하는 정보를 담는 객체
+
+connect-mongo
+    session data not saved in cookie, saved in server-side memory by default
+    
+    need to session in DB
+    
+    npm install connect-mongo
+
+세션은 브라우저가 우리의 서버(백엔드)를 방문할 때 만들어짐
+
+session({
+    secret: "hello!",
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/wetube" }),
+  })
+  
+    resave
+        방문하는 모든 사용자에게 쿠키를 만들어주고 세션을 만들어줌
+        사용자에게 쿠키를 주고 세션은 DB에 저장
+        로그인한 사용자의 세션만 DB에 저장하는 게 좋을 것
+        우리 사이트에 와서 영상을 보던 뭘 하던간에, 익명이라면 기억할 필요가 없으니 쿠키를 안주는게 좋음
+
+    saveUninitialized
+        Uninitialized : 세션이 새로 만들어지고, 수정된 적이 없을 때
+        세션을 수정할때만 DB에 저장하고 쿠키를 넘겨줌
+
+    secret, DB url 등등 보호해야 되는 정보들이 있음
+
+Cookie Properties(Application > Cookies)
+    secret
+        쿠키에 sign할 때 사용하는 string
+        쿠키에 sign하는 이유는, 우리 백엔드가 쿠키를 줬다는 걸 보여주기 위함
+        쿠키를 훔쳐서 마치 우리 서버인척 할 수 있음
+    Domain
+        브라우저는 Domain에 따라 쿠키를 생성,
+        Domain에 있는 backend로만 전송
+    Expires
+        쿠키 만료 날짜
+        지정 X => session cookie : finishes when the client shuts down
+        만료되면 브라우저는 쿠키 삭제
+
+dotenv
+    .env file, 모두 대문자로
+    process.env로 다 넣어줌
+    require("dotenv").config();
+    
+Implement Social Login
+    1. github에 user를 보냄
+    2. 우리에게 정보 공유하는 거 승인(authorize)
+    3. user는 코드를 가지고 우리 사이트로 redirect, access_token으로 바꿔야함
+    3. access_token으로 github API 사용해서 user정보 받아옴
+        token 10분안에 만료됨
+
+    
+    a(href="https://github.com/login/oauth/authorize?client_id=c82ce1287c3431adbb9f&scope=user:email")
+    여러 옵션들 보면서 여러가지 조정 가능
+    
+    URLSearchParams
+        params 결합하면서 인코딩 되어 통합된 URL return
+
+    
+    user의 authorize 끝나면 code와 함께 user를 callback URL로 보내줌
+    User에게서 받은 코드를 이용해 Access token으로 바꿔야함
+    깃허브 백엔드에 몇가지 정보와 함께 POST요청
+
+        
+const data = await fetch(url,{method:"POST"});
+const json = await data.json();
+console.log(json);
+
+to use fetch in nodeJS
+    npm install node-fetch
+
+    fetch => browser내장, node에서 기본적 사용은 불가
+
+req.session.destroy();
+    destroy the session, logout

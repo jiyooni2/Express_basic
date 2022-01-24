@@ -5,6 +5,6 @@ mixin video(video)
         p=video.description
         ul
             each hashtag in video.hashtags
-                li=hashtag
+                li #{hashtag.replace("#","")}
         small=video.createdAt
         hr
