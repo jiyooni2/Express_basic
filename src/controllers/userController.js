@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import { restart } from "nodemon";
 
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
@@ -152,7 +153,96 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const edit = (req, res) => res.send("Edit User");
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+
+export const postEdit = async (req, res) => {
+  //const id = req.session.user.id; 와 같음
+
+  const {
+    session: {
+      user: { _id, avatarUrl },
+    },
+    body: { name, email, username, location },
+    file,
+  } = req;
+
+  console.log(file);
+  if (
+    req.session.user.username !== username &&
+    (await User.exists({ username }))
+  ) {
+    return console.log("username duplicated");
+  }
+  if (req.session.user.email !== email && (await User.exists({ email }))) {
+    return console.log("email duplicated");
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id },
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+
+  req.session.user = updatedUser;
+
+  return res.redirect("/");
+};
+
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id, password },
+    },
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+
+  if (newPassword !== newPassword1) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password does not match",
+    });
+  }
+
+  const match = await bcrypt.compare(oldPassword, password);
+
+  if (!match) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(_id, {
+    password: await bcrypt.hash(newPassword, 5),
+  });
+
+  //or using pre db middleware
+  /*
+  const user = await User.findById(_id);
+  user.password = newPassword;
+  await user.save();
+*/
+
+  req.session.user = updatedUser;
+
+  return res.redirect("/");
+};
+
 export const remove = (req, res) => res.send("Remove User");
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Login" });
