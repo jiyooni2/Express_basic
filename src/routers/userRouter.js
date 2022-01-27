@@ -2,7 +2,7 @@ import express from "express";
 import {
   protectorMiddleware,
   publicOnlyMiddleWare,
-  uploadFiles,
+  avatarUpload,
 } from "../middlewares";
 
 import {
@@ -24,11 +24,11 @@ userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
-  .post(uploadFiles.single("avatar"), postEdit);
+  .post(avatarUpload.single("avatar"), postEdit);
 userRouter.get("/remove", remove);
 userRouter.get("/github/start", publicOnlyMiddleWare, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleWare, finishGithubLogin);
-userRouter.get(":id", see);
+userRouter.get("/:id", see);
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)

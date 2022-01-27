@@ -30,7 +30,7 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
-    res.redirect("/login");
+    return res.redirect("/login");
   } catch (error) {
     return res.status(400).render("join", {
       pageTitle: "Join",
@@ -67,8 +67,6 @@ export const postLogin = async (req, res) => {
 
   req.session.loggedIn = true;
   req.session.user = user;
-
-  console.log("put info in req session");
 
   return res.redirect("/");
 };
@@ -250,4 +248,18 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  //session말고 params에서 가져와야함, public page
+  const { id } = req.params;
+
+  const user = await User.findById(id).populate("videos");
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not Found" });
+  }
+  console.log(user);
+
+  return res.render("users/profile", {
+    pageTitle: user.name,
+    user,
+  });
+};

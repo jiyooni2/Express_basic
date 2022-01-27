@@ -1,9 +1,14 @@
 extends base
 
 block content
+    video(src="/"+video.fileUrl controls)
     div
         p=video.description
         small=video.createdAt
-    a(href=`${video.id}/edit`) Edit Video &rarr;
-    br
-    a(href=`${video.id}/delete`) Delete Video &rarr;
+    div 
+        small Uploaded by 
+            a(href=`/users/${video.owner._id}`)  #{video.owner.name}
+    if video.owner.id === loggedInUser._id 
+        a(href=`${video.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${video.id}/delete`) Delete Video &rarr;
