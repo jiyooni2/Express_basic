@@ -229,7 +229,7 @@ static file serving
     모든 폴더를 노출시키면, 보안상 안좋겠지 당연히 안됨
     app.use("/uploads", express.static("uploads"));
     uploads파일을 브라우저에게 노출 시키는 것
-    노출시킨 이후에는, img에서 src등 지정하면 접근 가능
+    노출시킨 이후에는, /uploads URL을 통해서 접근 가능하도록 만드는 것 
 
     파일을 서버에 저장하는게 아니라 다른 곳에 저장하는게 더 좋겟지
     서버가 재시작하면 파일이 날아가지 않도록
@@ -263,10 +263,71 @@ DB middleware
         isModified 함수로 변경되었는지 확인 후 해쉬
 
     
-Webpack
-    ex) .scss : 브라우저에서 못읽음 convert to .css
-    브라우저가 이해하도록 프론트엔드 코드를 변환
-    우리가 주는 모든 파일들을 다 받아서 js,css,jpg,png로 변환해줌
+<Webpack>
+ex) .scss : 브라우저에서 못읽음 convert to .css
+브라우저가 이해하도록 프론트엔드 코드를 변환
+우리가 주는 모든 파일들을 다 받아서 js,css,jpg,png로 변환해줌
+
+대부분의 프레임워크(react,vue,nest,...)에 Webpack이 이미 내장되어 있음
+직접 webpack code에 대해 작성할 일이 없음,Webpack의 원리에 대해 공부하자는 의미가 큼
+
+압축,변형 시켜서 최소화 한 뒤 정리된 코드를 결과물로 내놓음
+
+Setup
+    npm i webpack webpack-cli --save-dev
+    webpack.config.js
+        old js code만 이해 가능
+        entry,output(entry->output, converting input,output)
+        rules : 어떤 파일에 대해서 어떤 loader(파일 변환장치)를 사용할것인지
+        package.json에서 설정 :  webpack --config webpack.config.js
+        
+        input : client  output : assets
+        assets : 브라우저가 접근해서 볼 폴더, 브라우저가 파일을 읽어갈 곳
+        client : webpack 변환 전, webpack이 접근해서 변환할 파일들
+        
+
+    npm i -D babel-loader
+
+img(src="path/////")
+    src : for browser, not for node,
+
+scss loader
+    sass-loader : scss->css
+        npm install sass-loader sass --save-dev
+    css-loader : @import, url 해석
+    style-loader : css를 DOM에 주입(webpack이 생성한 js코드를 이용해서)
+    loader:["style-loader","css-loader","sass-loader"]
+        loader chain은 역순으로(webpack 특성)
+
+js에 @import scss, webpack이 둘을 정리해서 분류해둠
+JS파일을 babel로 처리해서 HTML의 head에 css를 적용
+
+
+MiniCssExtract Plugin
+    why we need?
+        JS안에 @import로 css파일 넣기에는 JS로드 다 된 뒤에나 css 적용
+        CSS 파일을 분리하고 싶음
     
-    대부분의 프레임워크에 Webpack이 이미 내장되어 있음
-    Webpack의 원리에 대해 공부하자는 의미가 큼
+    npm install -D mini-css-extract-plugin
+        MiniCssExtractPlugin.loader : replace "styles-loader", separate css file
+
+자동으로 assets를 생성하려면?
+    watch: true, clean:true(before new build, clean the output)
+    파일이 바뀔때마다 compile again
+    두개의 cmd를 동시에 실행시키면서 개발
+
+    이 설정하면, 프론트엔드 코드 바뀔때마다 백엔드 서버 재가동
+
+nodemon 몇가지 파일이나 폴더 무시하는 방법
+nodemon.json
+    {
+    "ignore":[ignore_list],
+    "exec": "babel-node src/init.js"
+    }
+
+    scripts에서는 nodemon만 하면 nodemon.json 의 exec 실행
+
+webpack --config webpack.config.json = webpack
+    둘 다 똑같이 잘 실행됨 config file을 default로 webpack.config.json을 찾음
+
+        
