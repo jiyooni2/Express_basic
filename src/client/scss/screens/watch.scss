@@ -1,0 +1,23 @@
+.video {
+  height: 50vh;
+  width: 100%;
+}
+
+.video__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.video__title {
+  font-size: 25px;
+  padding-bottom: 20px;
+}
+
+.video__description {
+  padding-bottom: 10px;
+}
+
+// div.video__info
+//     p.video__title #{video.title}
+//     p.video__description #{video.description}
+//     small.video__createdAt #{video.createdAt}

@@ -11,7 +11,7 @@ block content
         input(type="password", name="password2",placeholder="confirm password" required)
         input(type="text", name="location",placeholder="location" required)
         input(type="submit",value="Join")
-    hr
-    div 
+        include partials/social-login
+    div.auth-switch 
         span Already have an account?  
         a(href="/login") Login &rarr; 

@@ -1,7 +1,6 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
-import { restart } from "nodemon";
 
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
@@ -252,7 +251,10 @@ export const see = async (req, res) => {
   //session말고 params에서 가져와야함, public page
   const { id } = req.params;
 
-  const user = await User.findById(id).populate("videos");
+  const user = await User.findById(id).populate({
+    path: "videos",
+    populate: { path: "owner", model: "User" },
+  });
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not Found" });
   }

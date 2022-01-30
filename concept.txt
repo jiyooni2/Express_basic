@@ -299,8 +299,10 @@ scss loader
     loader:["style-loader","css-loader","sass-loader"]
         loader chain은 역순으로(webpack 특성)
 
-js에 @import scss, webpack이 둘을 정리해서 분류해둠
+js에 @import scss, webpack이 분류해둠
 JS파일을 babel로 처리해서 HTML의 head에 css를 적용
+
+js파일이 없으면, CSS를 DOM에 적용이 불가능함
 
 
 MiniCssExtract Plugin
