@@ -299,11 +299,10 @@ scss loader
     loader:["style-loader","css-loader","sass-loader"]
         loader chain은 역순으로(webpack 특성)
 
-js에 @import scss, webpack이 분류해둠
-JS파일을 babel로 처리해서 HTML의 head에 css를 적용
 
+js file안의 @import scss를 보고 webpack이 그 파일을 변환, HTML의 head에 css를 적용
 js파일이 없으면, CSS를 DOM에 적용이 불가능함
-
+(pug 파일에서 import js 하지 않아도 동작함)
 
 MiniCssExtract Plugin
     why we need?
@@ -333,3 +332,12 @@ webpack --config webpack.config.json = webpack
     둘 다 똑같이 잘 실행됨 config file을 default로 webpack.config.json을 찾음
 
         
+
+videoPlayer js코드를 프론트엔드에 삽입하기 위해 webpack사용
+    videoPlayer 코드를 search등 아무데서나 나타나게 하면 안됨
+    그럼 main.js와 분리해서 코드를 생성해야 함
+    output에서  filename: "js/[name].js",로 쓰면
+    [name]에는 엔트리 이름이 들어가면서 엔트리 파일마다, 다른 js파일 assets 생성
+
+    각 js파일을 assets에 webpack을 이용해서 변환된 코드를 넣고
+    필요한 pug파일에서 script 하면 됨

@@ -3,7 +3,10 @@ const path = require("path");
 
 module.exports = {
   //변환하고 싶은 코드 : entry
-  entry: "./src/client/js/main.js",
+  entry: {
+    main: "./src/client/js/main.js",
+    videoPlayer: "./src/client/js/videoPlayer.js",
+  },
   mode: "development",
   watch: true,
   plugins: [
@@ -13,7 +16,7 @@ module.exports = {
   ],
   //변환 후
   output: {
-    filename: "js/main.js",
+    filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),
     clean: true,
   },
