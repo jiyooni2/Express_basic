@@ -119,6 +119,16 @@ const handleMouseLeave = () => {
   }, 3000);
 };
 
+const handleEnded = () => {
+  playBtnIcon.classList = "fas fa-play";
+
+  const { id } = videoContainer.dataset;
+  //id가 필요, HTML(pug)에서 정보를 남겨야 함, data property 사용
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
+};
+
 //input : 변하면서 동시에, change : 변한 후에 한번 차이 주의
 volumeRange.addEventListener("input", handleVolumeChange);
 //metaData가 업데이트 된 뒤에야 비디오의 전체 시간 알 수 있겠지
@@ -130,9 +140,7 @@ timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
-video.addEventListener("ended", () => {
-  playBtnIcon.classList = "fas fa-play";
-});
+video.addEventListener("ended", handleEnded);
 
 if (video.readyState == 4) {
   handleLoadedMetaData();
