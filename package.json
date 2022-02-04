@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/nomadcoders/wetube-reloaded#readme",
   "dependencies": {
+    "@babel/cli": "^7.17.0",
+    "@ffmpeg/core": "^0.10.0",
+    "@ffmpeg/ffmpeg": "^0.10.1",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "dotenv": "^14.2.0",

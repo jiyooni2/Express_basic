@@ -373,3 +373,26 @@ createObjectURL
     브라우저의 메모리를 가르키는 url, 실제 url이 아님
     포인터 주소라고 생각
 
+FFmpeg 
+    handle any kind of audio, video file
+    compress, change the format,
+    screenshot,extract audio
+    화질 변경 등 거의 모든걸 다 할 수 있음
+
+    FFmpeg을 실행하려면 백엔드에서 실행해야 하지만 비쌈
+    sol : WebAssembly
+        개방형 표준, 기본적으로 웹사이트가 매우 빠른 코드를 실행하게 해줌
+        Frontend : HTML,CSS,JS만 사용
+        실행비용이 큰 프로그램을 브라우저에서 실행 할 수 있음
+        
+        ffmpeg.wasm : 비디오를 변환하기 위해 프론트엔드 사용(ffmpeg+WebAssembly)
+            브라우저에서 비디오 변환
+            서버비용 쓰기에는 너무 비쌈(기업에서는 당연히 서버쓰겟지)
+            npm install @ffmpeg/ffmpeg @ffmpeg/core
+    
+    브라우저에서 non-JS코드를 쓰기 위해 ffmpeg SW사용
+    가상 컴퓨터에서 작업한다고 생각하는게 편함
+
+multer
+    2가지 파일을 받고 싶으면, fields method 사용
+    req.files로 넘겨줌 

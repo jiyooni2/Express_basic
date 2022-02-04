@@ -24,6 +24,13 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 
+//for ffmpeg
+app.use((req, res, next) => {
+  res.append("Cross-Origin-Opener-Policy", "same-origin");
+  res.append("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
+
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
