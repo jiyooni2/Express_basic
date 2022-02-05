@@ -28,11 +28,11 @@ userRouter
 userRouter.get("/remove", remove);
 userRouter.get("/github/start", publicOnlyMiddleWare, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleWare, finishGithubLogin);
-userRouter.get("/:id", see);
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)
   .get(getChangePassword)
   .post(postChangePassword);
+userRouter.get("/:id", see);
 
 export default userRouter;

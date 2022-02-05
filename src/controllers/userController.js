@@ -7,7 +7,7 @@ export const getJoin = (req, res) => {
 };
 export const postJoin = async (req, res) => {
   const { name, email, username, password, password2, location } = req.body;
-  const exists = await User.exists({ $or: [{ username }, { email }] });
+  const exists = await User.findOne({ $or: [{ username }, { email }] });
 
   if (password !== password2) {
     return res.status(400).render("join", {
@@ -155,8 +155,6 @@ export const getEdit = (req, res) => {
 };
 
 export const postEdit = async (req, res) => {
-  //const id = req.session.user.id; 와 같음
-
   const {
     session: {
       user: { _id, avatarUrl },
@@ -165,14 +163,13 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
 
-  console.log(file);
   if (
     req.session.user.username !== username &&
-    (await User.exists({ username }))
+    (await User.findOne({ username }))
   ) {
     return console.log("username duplicated");
   }
-  if (req.session.user.email !== email && (await User.exists({ email }))) {
+  if (req.session.user.email !== email && (await User.findOne({ email }))) {
     return console.log("email duplicated");
   }
 
@@ -190,11 +187,14 @@ export const postEdit = async (req, res) => {
 
   req.session.user = updatedUser;
 
+  req.flash("info", "Changes saved");
+
   return res.redirect("/");
 };
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly) {
+    req.flash("error", "Can't change password");
     return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
@@ -234,6 +234,7 @@ export const postChangePassword = async (req, res) => {
   user.password = newPassword;
   await user.save();
 */
+  req.flash("info", "Password updated");
 
   req.session.user = updatedUser;
 
@@ -241,10 +242,17 @@ export const postChangePassword = async (req, res) => {
 };
 
 export const remove = (req, res) => res.send("Remove User");
-export const getLogin = (req, res) =>
+
+export const getLogin = (req, res) => {
   res.render("login", { pageTitle: "Login" });
+};
+
 export const logout = (req, res) => {
-  req.session.destroy();
+  req.flash("info", "Bye Bye");
+  req.session.user = null;
+  req.session.loggedIn = false;
+  //req.session.destroy();
+
   return res.redirect("/");
 };
 export const see = async (req, res) => {
@@ -258,7 +266,6 @@ export const see = async (req, res) => {
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not Found" });
   }
-  console.log(user);
 
   return res.render("users/profile", {
     pageTitle: user.name,

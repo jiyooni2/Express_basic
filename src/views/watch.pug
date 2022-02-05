@@ -19,17 +19,16 @@ block content
             div 
                 span#fullScreen
                     i.fas.fa-expand
-    //- div.video__info
-    //-     p.video__title #{video.title}
-    //-     p.video__description #{video.description}
-    //-     small.video__createdAt #{video.createdAt}
-    //- div 
-    //-     small Uploaded by 
-    //-         a(href=`/users/${video.owner._id}`)  #{video.owner.name}
-    //- if video.owner.id === loggedInUser._id 
-    //-     a(href=`${video.id}/edit`) Edit Video &rarr;
-    //-     br
-    //-     a(href=`${video.id}/delete`) Delete Video &rarr;
+    div#video__info
+        p#video__title #{video.title}
+        p#video__description #{video.description}
+        small#video__createdAt #{video.createdAt}
+        small#upload Uploaded by 
+            a(href=`/users/${video.owner._id}`)  #{video.owner.name}
+        if video.owner.id === loggedInUser._id 
+            div#video__edit
+                a(href=`${video.id}/edit`) Edit Video &rarr;
+                a(href=`${video.id}/delete`) Delete Video &rarr;
     
-block scripts 
+block scripts
     script(src="/static/js/videoPlayer.js")

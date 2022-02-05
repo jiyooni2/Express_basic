@@ -396,3 +396,12 @@ FFmpeg
 multer
     2가지 파일을 받고 싶으면, fields method 사용
     req.files로 넘겨줌 
+
+Flash message(express-flash)
+    rendering message middleware
+    session에 있는 메세지
+    app.use(flash()) 한 순간부터, req.flash 사용 가능
+    req.flash()를 사용해서 메세지를 보여줄 수 있음
+    req.flash()를 하는건 결국 res.locals에 messages locals를 만들어줌
+    메세지가 한번 보여지고 나면 express가 cache에서 지워버림
+    
