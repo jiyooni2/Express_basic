@@ -24,6 +24,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 //for ffmpeg
 app.use((req, res, next) => {

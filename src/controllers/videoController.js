@@ -1,5 +1,6 @@
 import Video from "../models/Video";
 import User from "../models/User";
+import Comment from "../models/Comment";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -10,11 +11,13 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id).populate(["owner", "comments"]);
 
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
+
+  console.log(video);
 
   return res.render("watch", { pageTitle: video.title, video });
 };
@@ -131,7 +134,7 @@ export const search = async (req, res) => {
 
 export const registerView = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.find({ id });
+  const video = await Video.find({ _id: id });
 
   if (!video) {
     return res.sendStatus(404);
@@ -140,4 +143,31 @@ export const registerView = async (req, res) => {
   video.meta.views++;
   await video.save();
   return res.sendStatus(200);
+};
+
+export const createComment = async (req, res) => {
+  const { id } = req.params;
+  const video = await Video.findOne({ _id: id });
+  const user = await User.findOne({ _id: req.session.user._id });
+
+  if (!video || !user) {
+    return res.sendStatus(404);
+  }
+
+  console.log(video);
+
+  const comment = await Comment.create({
+    text: req.body.text,
+    owner: req.session.user._id,
+    video: id,
+  });
+
+  video.comments.push(comment._id);
+  await video.save();
+
+  user.comments.push(comment._id);
+  await user.save();
+
+  //Created
+  return res.sendStatus(201).json({ newCommentId: comment._id });
 };
