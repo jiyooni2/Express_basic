@@ -16,9 +16,7 @@ export const watch = async (req, res) => {
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
-
   console.log(video);
-
   return res.render("watch", { pageTitle: video.title, video });
 };
 
@@ -147,14 +145,16 @@ export const registerView = async (req, res) => {
 
 export const createComment = async (req, res) => {
   const { id } = req.params;
+  if (!req.session.user) {
+    return res.sendStatus(404);
+  }
+
   const video = await Video.findOne({ _id: id });
   const user = await User.findOne({ _id: req.session.user._id });
 
   if (!video || !user) {
     return res.sendStatus(404);
   }
-
-  console.log(video);
 
   const comment = await Comment.create({
     text: req.body.text,
@@ -169,5 +169,25 @@ export const createComment = async (req, res) => {
   await user.save();
 
   //Created
-  return res.sendStatus(201).json({ newCommentId: comment._id });
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const { id } = req.params;
+  if (!req.session.user) {
+    return res.sendStatus(404);
+  }
+
+  //find는 여러개를 찾아서 array로 return, true/false check 시 주의하자!!
+  const comment = await Comment.findOne({ _id: id });
+  if (!comment) {
+    return res.sendStatus(404);
+  }
+
+  if (String(comment.owner) !== String(req.session.user._id)) {
+    return res.sendStatus(404);
+  }
+
+  await Comment.findByIdAndDelete(id);
+  return res.sendStatus(200);
 };
