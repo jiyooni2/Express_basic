@@ -40,9 +40,11 @@ block content
         ul
             each comment in video.comments.reverse()
                 li.video__comment(data-id=comment.id)
-                    i.fas.fa-comment
+                    span#profile_img   
+                        a(href=`/users/${comment.owner._id}`) 
+                            img(src="/"+comment.owner.avatarUrl width="30" height="30" )
                     span #{comment.text}
-                    if comment.owner==loggedInUser._id
+                    if comment.owner._id==loggedInUser._id
                         span#video__delete-comment ❌
         
 

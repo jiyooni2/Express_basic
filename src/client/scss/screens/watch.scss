@@ -93,6 +93,13 @@
   margin: 0 auto;
   margin-top: 20px;
   .video__comment {
+    #profile_img {
+      margin-right: 10px;
+      img {
+        border-radius: 50%;
+      }
+    }
+    align-items: center;
     display: flex;
     padding: 10px;
     border-radius: 20px;

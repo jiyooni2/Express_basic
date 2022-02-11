@@ -433,23 +433,11 @@ fetch
     response에 json데이터를 보내고 싶으면, res.json(data); API에서 보내주면,
     fetch의 returnValue.json() 하면 접근 가능
 
-
-
-
 서버에 보내는 모든 요청에 cookie가 있다는 걸 잊지 말자
 
-클릭시 fetch request, 댓글 삭제
-API router, controller
-댓글 주인 확인
-이 버튼이 모두에게 보여져서도 안됨
-오로지 댓글 작성자에게만 보여지게 해야 함(Delete video, edit video또한 마찬가지)
-fetch method에 delete 할 수 있음
-router.delete()도 사용 가능!!
 
-기존에 있던건 onClick으로 처리 가능한데,
-새로 추가한 거에 대해서 고민하자 
 
-1.다른 페이지에 대해서 404 처리
-2.comment에서 유저 프로필
-4.썸네일 디폴트 값 설정(올린영상중 알아서 캡쳐, FFmpeg으로 될듯)
+에러메세지 관리
+
+
 6.글자수 관리

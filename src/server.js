@@ -43,4 +43,8 @@ app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 app.use("/api", apiRouter);
 
+app.use(function (req, res, next) {
+  res.status(404).render("404");
+});
+
 export default app;
