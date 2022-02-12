@@ -435,9 +435,47 @@ fetch
 
 서버에 보내는 모든 요청에 cookie가 있다는 걸 잊지 말자
 
-
-
+<더 할것>
 에러메세지 관리
 
 
 6.글자수 관리
+
+
+Deployment
+    babel-node
+        for development
+        performance문제 있음
+        Babel CLI 사용
+        최신 JS 문법으로 node 실행
+
+    "build": "babel src -d build",
+    "start": "node build/init.js",
+        build하면서, 코드 압축하고 예전 문법으로 돌려서
+        node로도 실행 가능
+    
+    front build
+        webpack 설정
+        mode:"production", watch:false
+
+Heroku
+    변경사항을 commit하고, push를 해야함
+    heroku가 보는 파일은 github가 보는 파일
+    .env 파일 등 github에게 주지 않는 파일들 관리해야 함
+        환경변수 settings에서 등록
+    heroku는 포트 4000번을 주지 않고, 랜덤으로 줌
+        그 PORT값은 환경변수에 등록해줌
+
+<순서>
+    install dependencies
+    npm run build 실행 후 npm start
+
+    but, DB 없음
+
+MongoDB atlas
+    not for localhost, DB의 URL 제공
+
+    github login할 때 authorization callback URL 바꿔줘야 함
+    개발 용도로는 localhost 연결
+
+    

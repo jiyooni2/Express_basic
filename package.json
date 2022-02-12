@@ -7,8 +7,12 @@
     "url": "git+https://github.com/nomadcoders/wetube-reloaded.git"
   },
   "scripts": {
+    "start": "node build/init.js",
+    "build": "npm run build:server && npm run build:assets",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
     "dev": "nodemon --exec babel-node src/init.js",
-    "assets": "webpack --config webpack.config.js"
+    "assets": "webpack --mode=development -w"
   },
   "author": "Nicolas Serrano <nico@nomadcoders.co>",
   "license": "MIT",
@@ -17,7 +21,6 @@
   },
   "homepage": "https://github.com/nomadcoders/wetube-reloaded#readme",
   "dependencies": {
-    "@babel/cli": "^7.17.0",
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
     "bcrypt": "^5.0.1",
@@ -36,6 +39,7 @@
     "video-snapshot": "^1.0.11"
   },
   "devDependencies": {
+    "@babel/cli": "^7.17.0",
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.10",
     "@babel/preset-env": "^7.13.10",
