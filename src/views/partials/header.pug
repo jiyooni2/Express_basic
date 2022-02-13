@@ -1,12 +1,14 @@
 header
     a(href="/").header__logo
-        img(src="/uploads/nuguri.png",width="120",height="70")
+        img(src="https://nugurisite.s3.ap-northeast-2.amazonaws.com/nuguri.png",width="120",height="70" crossorigin)
         //- i.fab.fa-youtube
     nav
         ul 
             li
                 a(href="/search") Search 
                     i.fas.fa-search
+
+
             
             if loggedIn
                 li
@@ -17,11 +19,12 @@ header
                     a(href="/users/logout") logout 
                 li
                     a(href=`/users/${loggedInUser._id}`)
-                        if loggedInUser.avatarUrl === ""
-                            span 😀
+                        if loggedInUser.avatarUrl.includes("github")
+                            img.header__avatar(src=loggedInUser.avatarUrl crossorigin)
                         else
-                            img.header__avatar(src="/" + loggedInUser.avatarUrl)
-            else
+                            img.header__avatar(src=loggedInUser.avatarUrl crossorigin)
+
+            else    
                 li 
                     a(href="/login") Login 
                 li

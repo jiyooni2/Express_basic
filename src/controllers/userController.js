@@ -173,10 +173,11 @@ export const postEdit = async (req, res) => {
     return console.log("email duplicated");
   }
 
+  const isHeroku = process.env.NODE_ENV === "production";
   const updatedUser = await User.findByIdAndUpdate(
     { _id },
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       name,
       email,
       username,
@@ -255,6 +256,7 @@ export const logout = (req, res) => {
 
   return res.redirect("/");
 };
+
 export const see = async (req, res) => {
   //session말고 params에서 가져와야함, public page
   const { id } = req.params;

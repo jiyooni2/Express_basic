@@ -478,4 +478,15 @@ MongoDB atlas
     github login할 때 authorization callback URL 바꿔줘야 함
     개발 용도로는 localhost 연결
 
-    
+AWS
+    다시 배포하면, 파일들이 다 없어지는걸 해결
+    AWS S3 : cloud DB service
+    IAM : API Key(S3와 소통)
+        권한설정은 S3 Access
+    ACL
+        public read
+
+multer-S3
+    multer를 사용하지만, storage로 S3 사용
+
+로컬에서 개발할 때 NODE_ENV 확인
