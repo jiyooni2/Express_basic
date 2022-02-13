@@ -8,7 +8,7 @@
     margin: auto;
   }
   .videoControls {
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.5s ease-in-out;
     &.showing {
       opacity: 1;
@@ -22,7 +22,7 @@
     right: 0;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr auto;
+    grid-template-columns: 1fr 6fr 1fr 0.1fr;
     gap: 10px;
     justify-content: space-between;
     background-color: #0f1117;
@@ -38,6 +38,13 @@
       }
       .videoControls__time {
         font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span#separator {
+          margin-left: 5px;
+          margin-right: 5px;
+        }
       }
     }
     .videoControls__volume {
