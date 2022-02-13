@@ -132,7 +132,7 @@ const handleEnded = () => {
 //input : 변하면서 동시에, change : 변한 후에 한번 차이 주의
 volumeRange.addEventListener("input", handleVolumeChange);
 //metaData가 업데이트 된 뒤에야 비디오의 전체 시간 알 수 있겠지
-video.addEventListener("loadedmetadata", handleLoadedMetaData);
+video.addEventListener("canplay", handleLoadedMetaData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
