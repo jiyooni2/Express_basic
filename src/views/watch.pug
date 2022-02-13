@@ -32,7 +32,7 @@ block content
    
     if loggedIn    
     div.video__add-comments
-        form.video__comment-form#commentForm(onsubmit="submitBtn.disabled=true; return true;")
+        form.video__comment-form#commentForm
             input#comment(type="text" placeholder="Write a comment.")
             button(name="submitBtn")
                 i.fas.fa-plus
