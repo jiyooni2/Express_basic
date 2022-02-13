@@ -1,11 +1,21 @@
+.video-box {
+  display: flex;
+  flex-direction: column;
+}
+
 .video-mixin {
   .video-mixin__thumb {
     height: 140px;
-    border-radius: 7px;
     width: 100%;
-    background-color: ivory;
+    #thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+    }
   }
   .video-mixin__data {
+    word-wrap: break-word;
     padding: 0px 15px;
     .video-mixin__title {
       font-size: 18px;
