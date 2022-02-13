@@ -15,12 +15,11 @@ export const watch = async (req, res) => {
   const video = await Video.findById(id)
     .populate({
       path: "comments",
-
       populate: { path: "owner", select: { _id: true, avatarUrl: true } },
     })
     .populate({
       path: "owner",
-      select: { _id: true, name: true },
+      select: { _id: true, avatarUrl: true, name: true },
     });
 
   console.log(video);

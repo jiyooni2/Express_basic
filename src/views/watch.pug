@@ -22,20 +22,24 @@ block content
     div#video__info
         p#video__title #{video.title}
         p#video__description #{video.description}
+        p#hashtags #{video.hashtags.join(" ")}
         small#video__createdAt #{video.createdAt}
-        small#upload Uploaded by 
-            a(href=`/users/${video.owner._id}`)  #{video.owner.name}
+        div#upload Uploaded by 
+            a(href=`/users/${video.owner._id}`) 
+                img(src=video.owner.avatarUrl width="40" height="40" crossorigin)
+                p #{video.owner.name}
+
         if video.owner.id === loggedInUser._id 
             div#video__edit
                 a(href=`${video.id}/edit`) Edit Video &rarr;
                 a(href=`${video.id}/delete`) Delete Video &rarr;
-   
+
     if loggedIn    
-    div.video__add-comments
-        form.video__comment-form#commentForm
-            input#comment(type="text" placeholder="Write a comment.")
-            button(name="submitBtn")
-                i.fas.fa-plus
+        div.video__add-comments
+            form.video__comment-form#commentForm
+                input#comment(type="text" placeholder="Write a comment.")
+                button(name="submitBtn")
+                    i.fas.fa-plus
     div.video__comments
         ul
             each comment in video.comments.reverse()
