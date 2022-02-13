@@ -13,9 +13,10 @@ const addComment = (text, commentId, userId, avatarUrl) => {
   const img = document.createElement("img");
   profile.id = "profile_img";
   a.setAttribute("href", `/users/${userId}`);
-  img.setAttribute("src", `/${avatarUrl}`);
+  img.setAttribute("src", `${avatarUrl}`);
   img.setAttribute("width", "30");
   img.setAttribute("height", "30");
+  img.setAttribute("crossorigin", "");
 
   a.appendChild(img);
   profile.appendChild(a);
