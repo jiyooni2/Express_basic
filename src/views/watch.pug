@@ -32,9 +32,9 @@ block content
    
     if loggedIn    
     div.video__add-comments
-        form.video__comment-form#commentForm
+        form.video__comment-form#commentForm(onsubmit="submitBtn.disabled=true; return true;")
             input#comment(type="text" placeholder="Write a comment.")
-            button
+            button(name="submitBtn")
                 i.fas.fa-plus
     div.video__comments
         ul
@@ -42,7 +42,7 @@ block content
                 li.video__comment(data-id=comment.id)
                     span#profile_img   
                         a(href=`/users/${comment.owner._id}`) 
-                            img(src="/"+comment.owner.avatarUrl width="30" height="30" )
+                            img(src=comment.owner.avatarUrl width="30" height="30" crossorigin)
                     span #{comment.text}
                     if comment.owner._id==loggedInUser._id
                         span#video__delete-comment ❌
