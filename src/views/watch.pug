@@ -31,8 +31,9 @@ block content
 
         if video.owner.id === loggedInUser._id 
             div#video__edit
-                a(href=`${video.id}/edit`) Edit Video &rarr;
-                a(href=`${video.id}/delete`) Delete Video &rarr;
+                a(href=`${video.id}/edit`) Edit Video&rarr;
+                span#separator   
+                a(href=`${video.id}/delete`) Delete Video&rarr;
 
     if loggedIn    
         div.video__add-comments

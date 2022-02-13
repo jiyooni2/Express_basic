@@ -88,10 +88,21 @@ const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement;
   if (fullscreen) {
     document.exitFullscreen();
+    video.classList.remove("full");
     fullScreenIcon.classList = "fas fa-expand";
   } else {
     videoContainer.requestFullscreen();
+    video.classList.add("full");
     fullScreenIcon.classList = "fas fa-compress";
+  }
+};
+
+//handle exit full screen using esc key
+const handleExitFullscreen = () => {
+  const fullscreen = document.fullscreenElement;
+  if (fullscreen) {
+    video.classList.remove("full");
+    fullScreenIcon.classList = "fas fa-expand";
   }
 };
 
@@ -141,6 +152,7 @@ fullScreenBtn.addEventListener("click", handleFullScreen);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 video.addEventListener("ended", handleEnded);
+document.addEventListener("fullscreenchange", handleExitFullscreen);
 
 if (video.readyState == 4) {
   handleLoadedMetaData();
